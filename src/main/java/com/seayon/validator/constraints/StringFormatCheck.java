@@ -27,6 +27,8 @@ public @interface StringFormatCheck {
 
 	int maxLength();
 
+	String charsetName() default "";
+
 	boolean optional() default false;
 
 	Class<?>[] groups() default {};

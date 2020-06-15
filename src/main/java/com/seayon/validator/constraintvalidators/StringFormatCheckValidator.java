@@ -1,6 +1,7 @@
 package com.seayon.validator.constraintvalidators;
 
 import com.seayon.validator.constraints.StringFormatCheck;
+import sun.nio.cs.ext.GBK;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -20,6 +21,8 @@ public class StringFormatCheckValidator implements ConstraintValidator<StringFor
 
     private String message;
 
+    private String charsetName;
+
     boolean optional;
 
     @Override
@@ -28,6 +31,7 @@ public class StringFormatCheckValidator implements ConstraintValidator<StringFor
         this.maxLength = stringFormatCheck.maxLength();
         this.optional = stringFormatCheck.optional();
         this.message = stringFormatCheck.message();
+        this.charsetName = stringFormatCheck.charsetName();
     }
 
     @Override
@@ -39,7 +43,11 @@ public class StringFormatCheckValidator implements ConstraintValidator<StringFor
 
         int length = 0;
         try {
-            length = value.getBytes("GBK").length;
+            if (!StringUtils.isBlank(charsetName)) {
+                length = value.getBytes(charsetName).length;
+            } else {
+                length = value.length();
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             throw new RuntimeException("The Character Encoding GBK is not supported");

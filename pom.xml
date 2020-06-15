@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zhaoxuyang</groupId>
-    <artifactId>Validator-Plus</artifactId>
+    <artifactId>validator-plus</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
     <properties>
