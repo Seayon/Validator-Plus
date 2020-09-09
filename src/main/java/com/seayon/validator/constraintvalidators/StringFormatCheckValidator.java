@@ -1,7 +1,7 @@
 package com.seayon.validator.constraintvalidators;
 
+
 import com.seayon.validator.constraints.StringFormatCheck;
-import sun.nio.cs.ext.GBK;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -40,7 +40,17 @@ public class StringFormatCheckValidator implements ConstraintValidator<StringFor
         if (StringUtils.isBlank(value) && optional) {
             return true;
         }
-
+        if (StringUtils.isBlank(value)) {
+            if (minLength == 0) {
+                return true;
+            } else {
+                if (StringUtils.isBlank(message)) {
+                    constraintValidatorContext.disableDefaultConstraintViolation();
+                    constraintValidatorContext.buildConstraintViolationWithTemplate("该字段值不能为空").addConstraintViolation();
+                }
+                return false;
+            }
+        }
         int length = 0;
         try {
             if (!StringUtils.isBlank(charsetName)) {
@@ -51,17 +61,6 @@ public class StringFormatCheckValidator implements ConstraintValidator<StringFor
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             throw new RuntimeException("The Character Encoding GBK is not supported");
-        }
-        if (value == null || length == 0) {
-            if (minLength == 0) {
-                return true;
-            } else {
-                if (StringUtils.isBlank(message)) {
-                    constraintValidatorContext.disableDefaultConstraintViolation();
-                    constraintValidatorContext.buildConstraintViolationWithTemplate("该字段值不能为空").addConstraintViolation();
-                }
-                return false;
-            }
         }
         if (length > maxLength) {
             if (message == null || message.length() == 0) {
